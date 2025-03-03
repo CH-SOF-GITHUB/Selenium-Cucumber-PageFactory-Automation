@@ -5,6 +5,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 public class LoginPage {
     // déclaration d'un Web Driver
     WebDriver driver;
@@ -43,4 +45,7 @@ public class LoginPage {
         LoginButton.click();
     }
 
+    public void verifyResultat(WebElement element, String someText, String message) {
+        assertTrue(element.getText().contains(someText), message);
+    }
 }

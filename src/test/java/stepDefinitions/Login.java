@@ -5,7 +5,11 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.time.Duration;
@@ -44,13 +48,27 @@ public class Login {
         loginPage.clickLoginButton();
     }
 
-    @Then("connexion avec succès pour données valides et échec de connexion et affichage un message d'erreur pour les données invalides")
-    public void connexionAvecSuccèsPourDonnéesValidesEtÉchecDeConnexionEtAffichageUnMessageDErreurPourLesDonnéesInvalides() {
+    @Then("connexion avec succès pour données valides")
+    public void connexionAvecSuccèsPourDonnéesValides() {
         String url = driver.getCurrentUrl();
-        if (url.equals("https://automationteststore.com/index.php?rt=account/account")) {
-            System.out.println("connexion avec succès et redirection vers la page d'accueil");
+        Assert.assertEquals("https://automationteststore.com/index.php?rt=account/account", url);
+        System.out.println("connexion avec succès avec des données valides et redirection vers la page d'accueil");
+        /*if (url.equals("https://automationteststore.com/index.php?rt=account/account")) {
+            System.out.println("connexion avec succès avec des données valides");
         } else {
-            System.out.println("échec de connexion et affichage d'un message d'erreur");
+            System.out.println("échec de connexion avec des données valides et affichage d'un message d'erreur");
+        }*/
+    }
+
+    @Then("échec de connexion et affichage un message d'erreur pour les données invalides")
+    public void échecDeConnexionEtAffichageUnMessageDErreurPourLesDonnéesInvalides() {
+        try {
+            WebElement Error = driver.findElement(By.className("alert-error"));
+            String errorMessage = Error.getText();
+            Assert.assertTrue(errorMessage.contains("Error: Incorrect login or password provided."));
+            System.out.println("échec de connexion et affichage d'un message d'erreur: 'Error: Incorrect login or password provided.'");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 }
